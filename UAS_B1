@@ -1,0 +1,37 @@
+getwd()
+setwd("C:/Users/hp/Downloads")
+mobil = read.csv("C:/Users/hp/Downloads/Mobil.csv", header = TRUE)
+mobil
+plot(mobil[,2])
+plot(mobil[,2],type="o",pch=16,cex=.5,xlab='Tanggal',ylab='Mobil')
+datats = ts(mobil[,2], start = c(4,25), end = c(6,2), frequency = 39)
+datats
+plot(datats)
+library(lmtest)
+#No1%
+# dugaan 1%
+mobil.fit.ma=arima(datats, order=c(0,0,1))
+mobil.fit.ma
+coeftest(mobil.fit.ma)
+#No.2%
+#dugaan 2%
+mobil.fit.ar=arima(datats, order=c(1,0,0))
+mobil.fit.ar
+coeftest(mobil.fit.ar)
+#No.3%
+#dugaan 3%
+mobil.fit.arma=arima(datats, order=c(1,0,1))
+mobil.fit.arma
+coeftest(mobil.fit.arma)
+
+acf(mobil, lag.max=25, type="correlation", main="ACF for the Number \nof mobil")
+acf(mobil, lag.max=25, type="partial", main="PACF for the Number \nof mobil")
+
+library(forecast)
+library(ggplot2)
+fit = auto.arima(datats)
+fit
+forecast_result = forecast(mobil.fit.ar, h = 12)
+forecast_result
+plot(forecast_result, main = "plot forecast")
+
